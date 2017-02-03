@@ -17,6 +17,15 @@ LOCAL_PATH := $(call my-dir)
 
 ifeq ($(TARGET_DEVICE), VFD600)
 
+##include all files under msm8909 if avaliable
+.PHONY: CURRENT_BOARD_MK_FILES
+
+CURRENT_BOARD_MK_FILES:
+CBMKFLS :=device/Vodafone/msm8909-common/; \
+-include $(call all-makefiles-under,$(CBMKFLS));
+#replace the configs of the board with the right config...
+-include device/Vodafone/msm8909-common/board/00-qcom-platform-msm8909.mk
+#-include device/Vodafone/msm8909-common/init/Android.mk
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
 include $(CLEAR_VARS)
@@ -24,7 +33,7 @@ include $(CLEAR_VARS)
 # Create a link for the WCNSS config file, which ends up as a writable
 # version in /data/misc/wifi
 $(shell mkdir -p $(TARGET_OUT)/etc/firmware/wlan/prima; \
-    ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
-	    $(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
+ln -sf /data/misc/wifi/WCNSS_qcom_cfg.ini \
+$(TARGET_OUT)/etc/firmware/wlan/prima/WCNSS_qcom_cfg.ini)
 
 endif
